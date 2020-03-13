@@ -1,0 +1,7 @@
+{
+    "mode": "production",
+    "base_url": "",
+    "headers": {
+        "Accept" : "application/json"
+    }
+}

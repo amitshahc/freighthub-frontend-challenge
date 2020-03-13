@@ -1,0 +1,8 @@
+{
+    "mode": "development",
+    "base_url": "http://localhost:3000",
+    "headers": {
+        "Accept": "application/json"        
+    },
+    "recordsPerPage": 5
+}
