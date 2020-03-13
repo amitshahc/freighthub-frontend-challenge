@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './ShipmentList.css';
 // import axios from '../../config/axios';
-import Config from '../../config/config';
+// import Config from '../../config/config';
 import Shipment from '../Shipment/Shipment';
 // import Config from './config/config';
 
@@ -28,11 +28,11 @@ class ShipmentList extends Component {
   }
   
   getShipmentList(data) {
-    const start = (this.props.currentPage - 1) * Config.recordsPerPage;
-    const pageList = data.slice(start, Config.recordsPerPage);
+    // const start = (this.props.currentPage - 1) * Config.recordsPerPage;
+    // const pageList = data.slice(start, Config.recordsPerPage);
     // console.log(this.state, start, list);
 
-    let currentPageList = pageList.map((shipment) => {
+    let currentPageList = data.map((shipment) => {
       return <Shipment key={shipment.id} shipment={shipment} />;
     });
 
@@ -41,7 +41,7 @@ class ShipmentList extends Component {
   }
 
   render() {
-    let currentList = this.getShipmentList(this.props.data);
+    let currentList = this.getShipmentList(this.props.data);   
 
     return (
       <div>

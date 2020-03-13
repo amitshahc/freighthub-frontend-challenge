@@ -4,6 +4,11 @@ import './App.css';
 import ShipmentList from './apps/ShipmentList/ShipmentList';
 import axios from './config/axios';
 import Config from './config/config';
+import ReactPaginate from 'react-paginate';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import $ from 'jquery';
+
+window.React = React;
 
 class App extends Component {
   
@@ -13,8 +18,9 @@ class App extends Component {
     error: {
       message: ''
     },
-    list: [],
-    currentPage: 1,
+    data: [],
+    filtered: [],
+    offset: 1,
     pageCount: 0,
   }
   
@@ -32,19 +38,44 @@ class App extends Component {
         console.log(response);
         
         let newState = {};
-        newState.list = response.data;
+        newState.data = response.data;
         newState.pageCount = Math.ceil(response.data.length / Config.recordsPerPage);
 
-        this.updateLocalState(newState);
+        this.updateLocalState(newState, () => {
+          this.handlePageClick({});
+        });
       })
       .catch(error => {
         console.error(error);
       });
   }
 
+  handlePageClick = (data) => {
+    let selected = data.selected || 0;
+    let offset = Math.ceil(selected * Config.recordsPerPage);    
+    let filtered = this.state.data.slice(offset, offset +Config.recordsPerPage);
+    
+    this.updateLocalState({ filtered: filtered });
+  }
+  
   render() {
     return (
-      <ShipmentList data={this.state.list} currentPage={this.state.currentPage} pageCount={this.state.pageCount} />
+      <div>
+      <ShipmentList data={this.state.filtered} />
+      <ReactPaginate
+          previousLabel={'<'}
+          nextLabel={'>'}
+          breakLabel={'...'}
+          breakClassName={'break-me'}
+          pageCount={this.state.pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={this.handlePageClick}
+          containerClassName={'pagination'}
+          subContainerClassName={'pages pagination'}
+          activeClassName={'active'}
+      />
+      </div>
     );  
   }  
 }
