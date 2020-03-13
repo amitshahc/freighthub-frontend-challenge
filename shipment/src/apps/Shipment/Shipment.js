@@ -3,9 +3,11 @@ import './Shipment';
 
 const Shipment = (props) => {
     return (
-        <div>
-            {props.shipment.name}
-        </div>
+        <tr>
+            <td>{props.shipment.id}</td>
+            <td>{props.shipment.name}</td>
+            <td>{props.shipment.mode}</td>
+        </tr>
     );
 };
 

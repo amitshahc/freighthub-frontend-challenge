@@ -6,7 +6,7 @@ import axios from './config/axios';
 import Config from './config/config';
 import ReactPaginate from 'react-paginate';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import $ from 'jquery';
+// import $ from 'jquery';
 
 window.React = React;
 
@@ -61,10 +61,9 @@ class App extends Component {
   render() {
     return (
       <div>
-      <ShipmentList data={this.state.filtered} />
       <ReactPaginate
-          previousLabel={'<'}
-          nextLabel={'>'}
+          previousLabel={' < '}
+          nextLabel={' > '}
           breakLabel={'...'}
           breakClassName={'break-me'}
           pageCount={this.state.pageCount}
@@ -74,7 +73,8 @@ class App extends Component {
           containerClassName={'pagination'}
           subContainerClassName={'pages pagination'}
           activeClassName={'active'}
-      />
+        />
+        <ShipmentList data={this.state.filtered} />
       </div>
     );  
   }  

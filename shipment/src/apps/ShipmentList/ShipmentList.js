@@ -28,15 +28,10 @@ class ShipmentList extends Component {
   }
   
   getShipmentList(data) {
-    // const start = (this.props.currentPage - 1) * Config.recordsPerPage;
-    // const pageList = data.slice(start, Config.recordsPerPage);
-    // console.log(this.state, start, list);
-
     let currentPageList = data.map((shipment) => {
       return <Shipment key={shipment.id} shipment={shipment} />;
     });
 
-    // console.log(currentPageList);
     return currentPageList;
   }
 
@@ -45,7 +40,16 @@ class ShipmentList extends Component {
 
     return (
       <div>
-        {currentList}
+        <table className="table table-hover table-stripped">
+          <thead>
+            <tr>
+              <th>id</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentList}    
+          </tbody>          
+        </table>        
       </div>
     );
   }
