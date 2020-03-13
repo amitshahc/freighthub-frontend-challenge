@@ -18,10 +18,13 @@ class App extends Component {
     error: {
       message: ''
     },
-    data: [],
-    filtered: [],
-    offset: 1,
+    master_data: [],    
+    filtered_data: [],
+    display_data: [],
+    offset: 0,
     pageCount: 0,
+    orderBy: "id",
+    orderAsc: true
   }
   
   componentDidMount() {
@@ -35,10 +38,11 @@ class App extends Component {
   getShipments() {
     axios.get('/shipments')
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         
         let newState = {};
-        newState.data = response.data;
+        newState.master_data = response.data;
+        newState.filtered_data = response.data;
         newState.pageCount = Math.ceil(response.data.length / Config.recordsPerPage);
 
         this.updateLocalState(newState, () => {
@@ -51,19 +55,38 @@ class App extends Component {
   }
 
   handlePageClick = (data) => {
-    let selected = data.selected || 0;
-    let offset = Math.ceil(selected * Config.recordsPerPage);    
-    let filtered = this.state.data.slice(offset, offset +Config.recordsPerPage);
+    let selected = data.selected || this.state.offset;
+    let offset = Math.ceil(selected * Config.recordsPerPage);
+
+    let display_data = this.state.filtered_data.slice(offset, offset + Config.recordsPerPage);
     
-    this.updateLocalState({ filtered: filtered });
+    this.updateLocalState({ display_data: display_data });
+  }
+
+  handleOrderByClick(key){
+    // console.log(key, this.state);return;
+    if(this.state.orderBy === key){
+      this.updateLocalState({orderAsc: !this.state.orderAsc});
+    }
+    else{
+      this.updateLocalState({orderBy: key, orderAsc: true});      
+    }
+
+    let data = this.state.filtered_data.sort((a,b) => {
+      if(a[key] < b[key]) { return this.state.orderAsc ? -1 : 1; }
+      if(a[key] > b[key]) { return this.state.orderAsc? 1 : -1; }
+      return 0;
+    });
+
+    this.updateLocalState({filtered_data: data}, this.handlePageClick({}));
   }
   
   render() {
     return (
       <div>
       <ReactPaginate
-          previousLabel={' < '}
-          nextLabel={' > '}
+          previousLabel={' <Previous '}
+          nextLabel={' Next> '}
           breakLabel={'...'}
           breakClassName={'break-me'}
           pageCount={this.state.pageCount}
@@ -74,7 +97,7 @@ class App extends Component {
           subContainerClassName={'pages pagination'}
           activeClassName={'active'}
         />
-        <ShipmentList data={this.state.filtered} />
+        <ShipmentList data={this.state.display_data} orderBy={this.handleOrderByClick.bind(this)} />
       </div>
     );  
   }  

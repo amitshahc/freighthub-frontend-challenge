@@ -4,11 +4,12 @@ import './ShipmentList.css';
 // import Config from '../../config/config';
 import Shipment from '../Shipment/Shipment';
 // import Config from './config/config';
+import Table from '../../layouts/Table';
 
 
 class ShipmentList extends Component {
   
-  state = {
+  /* state = {
     hasError: false,
     hasSuccess: false,
     error: {
@@ -16,8 +17,15 @@ class ShipmentList extends Component {
     },
     list: [],
     currentPage: 1,
-    totalPage: 0,
-  }
+    totalPage: 0    
+  } */
+
+  thead = [
+    {key: "id", title: "#Id"},
+    {key: "name", title: "Name"},
+    {key: "mode", title: "Mode"}
+  ];
+    
 
   /* constructor(props) {
     super(props);    
@@ -33,23 +41,14 @@ class ShipmentList extends Component {
     });
 
     return currentPageList;
-  }
+  } 
 
   render() {
     let currentList = this.getShipmentList(this.props.data);   
 
     return (
       <div>
-        <table className="table table-hover table-stripped">
-          <thead>
-            <tr>
-              <th>id</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentList}    
-          </tbody>          
-        </table>        
+        <Table thead={this.thead} orderBy={this.props.orderBy}>{currentList}</Table>
       </div>
     );
   }
