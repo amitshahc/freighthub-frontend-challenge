@@ -1,3 +1,7 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import $ from 'jquery';
+import Popper from 'popper.js';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
@@ -5,8 +9,8 @@ import ShipmentList from './apps/ShipmentList/ShipmentList';
 import axios from './config/axios';
 import Config from './config/config';
 import ReactPaginate from 'react-paginate';
-import 'bootstrap/dist/css/bootstrap.min.css';
-// import $ from 'jquery';
+import SearchInput from './layouts/SearchInput';
+
 
 window.React = React;
 
@@ -23,8 +27,11 @@ class App extends Component {
     display_data: [],
     offset: 0,
     pageCount: 0,
-    orderBy: "id",
-    orderAsc: true
+    curruntPage: 0,
+    order: {
+      key: "id",
+      isAsc: true 
+    }    
   }
   
   componentDidMount() {
@@ -57,24 +64,37 @@ class App extends Component {
   handlePageClick = (data) => {
     let selected = data.selected || this.state.offset;
     let offset = Math.ceil(selected * Config.recordsPerPage);
-
+    console.log(offset);
     let display_data = this.state.filtered_data.slice(offset, offset + Config.recordsPerPage);
     
-    this.updateLocalState({ display_data: display_data });
+    this.updateLocalState({ curruntPage: selected, display_data: display_data });
   }
 
   handleOrderByClick(key){
     // console.log(key, this.state);return;
-    if(this.state.orderBy === key){
-      this.updateLocalState({orderAsc: !this.state.orderAsc});
+    let isAsc = this.state.order.isAsc;
+    if (this.state.order.key === key) {
+      isAsc = !this.state.order.isAsc;      
     }
-    else{
-      this.updateLocalState({orderBy: key, orderAsc: true});      
-    }
+    this.updateLocalState({ order: { key: key, isAsc: isAsc } }, this.reorder);
+  }
 
-    let data = this.state.filtered_data.sort((a,b) => {
-      if(a[key] < b[key]) { return this.state.orderAsc ? -1 : 1; }
-      if(a[key] > b[key]) { return this.state.orderAsc? 1 : -1; }
+  handleSearch(e) {
+    let id = e.target.value;
+    let data = this.state.master_data.filter((item) => {
+      return item.id.indexOf(id) > -1;
+    });
+    // console.dir(data);
+    let pageCount = Math.ceil(data.length / Config.recordsPerPage);
+    this.updateLocalState({ filtered_data: data, pageCount: pageCount }, this.reorder);
+  }
+
+  reorder() {
+    let key = this.state.order.key; console.log(key);
+    let data = this.state.filtered_data.sort((a, b) => {
+      let isAsc = this.state.order.isAsc;
+      if(a[key] < b[key]) { return isAsc ? -1 : 1; }
+      if(a[key] > b[key]) { return isAsc? 1 : -1; }
       return 0;
     });
 
@@ -84,20 +104,27 @@ class App extends Component {
   render() {
     return (
       <div>
-      <ReactPaginate
-          previousLabel={' <Previous '}
-          nextLabel={' Next> '}
-          breakLabel={'...'}
-          breakClassName={'break-me'}
-          pageCount={this.state.pageCount}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={this.handlePageClick}
-          containerClassName={'pagination'}
-          subContainerClassName={'pages pagination'}
-          activeClassName={'active'}
-        />
-        <ShipmentList data={this.state.display_data} orderBy={this.handleOrderByClick.bind(this)} />
+        <div className="d-flex">
+        <ReactPaginate
+            previousLabel={' <Previous | '}
+            nextLabel={' | Next> '}
+            breakLabel={'...'}
+            breakClassName={'break-me'}
+            pageCount={this.state.pageCount}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={this.handlePageClick}
+            containerClassName={'pagination'}
+            subContainerClassName={'pages pagination'}
+            activeClassName={'active'}
+            forcePage={this.state.curruntPage}
+          />
+        <SearchInput placeholder='Search' name='search_id' id='search-id' onChange={this.handleSearch.bind(this)} />
+        </div>
+        <ShipmentList
+          data={this.state.display_data}
+          orderByClicked={this.handleOrderByClick.bind(this)}
+          ordered={this.state.order} />
       </div>
     );  
   }  

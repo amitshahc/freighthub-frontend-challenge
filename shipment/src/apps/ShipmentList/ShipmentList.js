@@ -48,7 +48,7 @@ class ShipmentList extends Component {
 
     return (
       <div>
-        <Table thead={this.thead} orderBy={this.props.orderBy}>{currentList}</Table>
+        <Table thead={this.thead} ordered={this.props.ordered} orderByClicked={this.props.orderByClicked}>{currentList}</Table>
       </div>
     );
   }
