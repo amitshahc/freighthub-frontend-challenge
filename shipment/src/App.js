@@ -12,6 +12,7 @@ import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Alert from './layouts/Alert';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -29,7 +30,7 @@ class App extends Component {
     },
     master_data: [],    
     filtered_data: [],
-    display_data: [],
+    display_data: null,
     offset: 0,
     pageCount: 0,
     curruntPage: 0,
@@ -62,14 +63,15 @@ class App extends Component {
         });
       })
       .catch(error => {
-        console.error(error);
+        // console.error(error);
+        this.updateLocalState({ hasError: true, hasSuccess: false, error: { message: error.message } });
       });
   }
 
   handlePageClick = (data) => {
     let selected = data.selected || this.state.offset;
     let offset = Math.ceil(selected * Config.recordsPerPage);
-    console.log(offset);
+    // console.log(offset);
     let display_data = this.state.filtered_data.slice(offset, offset + Config.recordsPerPage);
     
     this.updateLocalState({ curruntPage: selected, display_data: display_data });
@@ -96,7 +98,7 @@ class App extends Component {
   }
 
   reorder() {
-    let key = this.state.order.key; console.log(key);
+    let key = this.state.order.key;
     let data = this.state.filtered_data.sort((a, b) => {
       
       a = (key === 'total') ? parseFloat(a[key]) : a[key];
@@ -141,11 +143,22 @@ class App extends Component {
                 }
               </div>
 
-              <ShipmentList
-                data={this.state.display_data}
-                orderByClicked={this.handleOrderByClick.bind(this)}
-                ordered={this.state.order}
-              />
+              {!!this.state.display_data &&
+                <ShipmentList
+                  data={this.state.display_data}
+                  orderByClicked={this.handleOrderByClick.bind(this)}
+                  ordered={this.state.order}
+                />
+              }
+
+              {!this.state.display_data && !this.state.hasError &&
+                <Alert type="info">Loading...</Alert>
+              }
+
+              {!!this.state.hasError &&
+                <Alert type="danger">{this.state.error.message}</Alert>
+              }
+
               </div>
           </Col>
       </Row>

@@ -4,5 +4,5 @@
     "headers": {
         "Accept": "application/json"        
     },
-    "recordsPerPage": 5
+    "recordsPerPage": 20
 }
