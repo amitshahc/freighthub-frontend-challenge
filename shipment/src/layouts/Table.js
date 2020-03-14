@@ -12,7 +12,7 @@ const Shipment = (props) => {
   }
   
     const headings = props.thead.map((heading) => {
-        return <th key={heading.key} className={`${heading.class}`} nowrap>
+        return <th key={heading.key} className={`${heading.class}`}>
           {orderedIcon(heading)}
           <a href="/" onClick={(event) => { props.orderByClicked(event, heading.key) }} className="mx-2">
             {heading.title}

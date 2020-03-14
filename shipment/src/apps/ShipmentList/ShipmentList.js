@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import './ShipmentList.css';
-// import axios from '../../config/axios';
-// import Config from '../../config/config';
 import Shipment from '../Shipment/Shipment';
-// import Config from './config/config';
 import Table from '../../layouts/Table';
 import Alert from '../../layouts/Alert';
 

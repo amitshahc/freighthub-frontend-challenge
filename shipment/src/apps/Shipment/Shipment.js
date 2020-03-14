@@ -1,5 +1,6 @@
 import React from 'react';
 import './Shipment';
+import { PropTypes } from 'prop-types';
 
 const Shipment = (props) => {
     return (
@@ -14,4 +15,14 @@ const Shipment = (props) => {
     );
 };
 
+Shipment.propTypes = {
+    shipment: PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+        mode: PropTypes.string,
+        origin: PropTypes.string,
+        destination: PropTypes.string,
+        total: PropTypes.string,
+    })
+}
 export default Shipment;
