@@ -12,7 +12,7 @@ const Shipment = (props) => {
   
     const headings = props.thead.map((heading) => {
         return <th key={heading.key}>
-          <a href="javascript:void(0);" onClick={() => props.orderByClicked(heading.key)}>
+          <a href="/" onClick={(event) => { props.orderByClicked(event, heading.key) }}>
             {heading.title}            
           </a>
           {orderedIcon(heading)}          

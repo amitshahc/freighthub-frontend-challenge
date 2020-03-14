@@ -1,7 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import $ from 'jquery';
-import Popper from 'popper.js';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
 import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
@@ -74,7 +70,8 @@ class App extends Component {
     this.updateLocalState({ curruntPage: selected, display_data: display_data });
   }
 
-  handleOrderByClick(key){
+  handleOrderByClick(event, key) {
+    event.preventDefault();
     // console.log(key, this.state);return;
     let isAsc = this.state.order.isAsc;
     if (this.state.order.key === key) {
