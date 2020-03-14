@@ -152,7 +152,7 @@ class App extends Component {
               }
 
               {!this.state.display_data && !this.state.hasError &&
-                <Alert type="info">Loading...</Alert>
+                <Alert type="warning">Loading...</Alert>
               }
 
               {!!this.state.hasError &&
