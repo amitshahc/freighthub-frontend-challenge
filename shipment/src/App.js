@@ -10,7 +10,11 @@ import axios from './config/axios';
 import Config from './config/config';
 import ReactPaginate from 'react-paginate';
 import SearchInput from './layouts/SearchInput';
+import { library } from '@fortawesome/fontawesome-svg-core'
+// import { fab } from '@fortawesome/free-brands-svg-icons'
+import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons'
 
+library.add(faAngleUp, faAngleDown);
 
 window.React = React;
 

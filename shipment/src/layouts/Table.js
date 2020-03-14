@@ -1,10 +1,11 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Shipment = (props) => {
 
   let orderedIcon = (heading) => {
     if (props.ordered.key === heading.key) {
-      return props.ordered.isAsc ? "Asc" : "Dsc";
+      return props.ordered.isAsc ? <FontAwesomeIcon icon="angle-down" /> : <FontAwesomeIcon icon="angle-up" />;
     }
     return null;
   }
@@ -12,9 +13,9 @@ const Shipment = (props) => {
     const headings = props.thead.map((heading) => {
         return <th key={heading.key}>
           <a href="javascript:void(0);" onClick={() => props.orderByClicked(heading.key)}>
-            {heading.title}
-            {orderedIcon(heading)}
+            {heading.title}            
           </a>
+          {orderedIcon(heading)}          
         </th>;
     });
 
