@@ -5,25 +5,17 @@ import './ShipmentList.css';
 import Shipment from '../Shipment/Shipment';
 // import Config from './config/config';
 import Table from '../../layouts/Table';
-
+import Alert from '../../layouts/Alert';
 
 class ShipmentList extends Component {
   
-  /* state = {
-    hasError: false,
-    hasSuccess: false,
-    error: {
-      message: ''
-    },
-    list: [],
-    currentPage: 1,
-    totalPage: 0    
-  } */
-
   thead = [
-    {key: "id", title: "#Id"},
-    {key: "name", title: "Name"},
-    {key: "mode", title: "Mode"}
+    {key: "id", title: "#Id", class:"text-left"},
+    {key: "name", title: "Name", class:"text-left"},
+    {key: "mode", title: "Mode", class:"text-left"},
+    {key: "origin", title: "Origin", class:"text-left"},
+    {key: "destination", title: "Destination", class:"text-left"},
+    {key: "total", title: "Total", class:"text-right"}
   ];
     
 
@@ -47,8 +39,13 @@ class ShipmentList extends Component {
     let currentList = this.getShipmentList(this.props.data);   
 
     return (
-      <div>
-        <Table thead={this.thead} ordered={this.props.ordered} orderByClicked={this.props.orderByClicked}>{currentList}</Table>
+      <div id="shipment-list">
+        {currentList.length > 0 &&
+          <Table thead={this.thead} ordered={this.props.ordered} orderByClicked={this.props.orderByClicked}>{currentList}</Table>
+        }
+        {currentList.length === 0 &&
+          <Alert type="danger">No record found</Alert> 
+        }
       </div>
     );
   }

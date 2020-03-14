@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Table from 'react-bootstrap/Table';
 
 const Shipment = (props) => {
 
@@ -11,16 +12,17 @@ const Shipment = (props) => {
   }
   
     const headings = props.thead.map((heading) => {
-        return <th key={heading.key}>
-          <a href="/" onClick={(event) => { props.orderByClicked(event, heading.key) }}>
-            {heading.title}            
+        return <th key={heading.key} className={`${heading.class}`} nowrap>
+          {orderedIcon(heading)}
+          <a href="/" onClick={(event) => { props.orderByClicked(event, heading.key) }} className="mx-2">
+            {heading.title}
           </a>
-          {orderedIcon(heading)}          
         </th>;
     });
 
     return (
-        <table className="table table-hover table-stripped">
+      // <table className="table table-hover table-striped">  
+      <Table hover striped size="sm" responsive>
           <thead>
             <tr>
                 {headings}
@@ -29,7 +31,7 @@ const Shipment = (props) => {
           <tbody>
             {props.children}    
           </tbody>          
-        </table>
+      </Table>
     );
 };
 

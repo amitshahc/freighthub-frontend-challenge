@@ -6,9 +6,14 @@ import axios from './config/axios';
 import Config from './config/config';
 import ReactPaginate from 'react-paginate';
 import SearchInput from './layouts/SearchInput';
-import { library } from '@fortawesome/fontawesome-svg-core'
+import { library } from '@fortawesome/fontawesome-svg-core';
 // import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons'
+import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 library.add(faAngleUp, faAngleDown);
 
@@ -93,9 +98,13 @@ class App extends Component {
   reorder() {
     let key = this.state.order.key; console.log(key);
     let data = this.state.filtered_data.sort((a, b) => {
+      
+      a = (key === 'total') ? parseFloat(a[key]) : a[key];
+      b = (key === 'total') ? parseFloat(b[key]) : b[key];
+
       let isAsc = this.state.order.isAsc;
-      if(a[key] < b[key]) { return isAsc ? -1 : 1; }
-      if(a[key] > b[key]) { return isAsc? 1 : -1; }
+      if(a < b) { return isAsc ? -1 : 1; }
+      if(a > b) { return isAsc? 1 : -1; }
       return 0;
     });
 
@@ -104,29 +113,43 @@ class App extends Component {
   
   render() {
     return (
-      <div>
-        <div className="d-flex">
-        <ReactPaginate
-            previousLabel={' <Previous | '}
-            nextLabel={' | Next> '}
-            breakLabel={'...'}
-            breakClassName={'break-me'}
-            pageCount={this.state.pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={this.handlePageClick}
-            containerClassName={'pagination'}
-            subContainerClassName={'pages pagination'}
-            activeClassName={'active'}
-            forcePage={this.state.curruntPage}
-          />
-        <SearchInput placeholder='Search' name='search_id' id='search-id' onChange={this.handleSearch.bind(this)} />
-        </div>
-        <ShipmentList
-          data={this.state.display_data}
-          orderByClicked={this.handleOrderByClick.bind(this)}
-          ordered={this.state.order} />
-      </div>
+      <Container fluid>
+        <Row>
+          <Col>
+            <div>
+              <div className="d-flex justify-content-between m-y-2">
+                <SearchInput
+                  placeholder='Search by Id' name='search_id' id='search-id'
+                  onChange={this.handleSearch.bind(this)}
+                />
+
+                {this.state.pageCount > 0 &&
+                  <ReactPaginate
+                    previousLabel={' < Previous '}
+                    nextLabel={' Next > '}
+                    breakLabel={'...'}
+                    breakClassName={'break-me'}
+                    pageCount={this.state.pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={this.handlePageClick}
+                    containerClassName={'pagination'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                    forcePage={this.state.curruntPage}
+                  />
+                }
+              </div>
+
+              <ShipmentList
+                data={this.state.display_data}
+                orderByClicked={this.handleOrderByClick.bind(this)}
+                ordered={this.state.order}
+              />
+              </div>
+          </Col>
+      </Row>
+    </Container>
     );  
   }  
 }

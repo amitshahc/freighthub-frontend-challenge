@@ -7,6 +7,9 @@ const Shipment = (props) => {
             <td>{props.shipment.id}</td>
             <td>{props.shipment.name}</td>
             <td>{props.shipment.mode}</td>
+            <td>{props.shipment.origin}</td>
+            <td>{props.shipment.destination}</td>
+            <td className="text-right">{props.shipment.total}</td>
         </tr>
     );
 };

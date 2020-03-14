@@ -1,0 +1,12 @@
+
+#shipment-list table th{
+    min-width: 12rem;
+}
+
+#shipment-list table th:first-child, #shipment-list table th:nth-child(3){
+    min-width: 8rem;
+}
+
+#shipment-list table td{
+    padding: 0.5rem 0.5rem;
+}
